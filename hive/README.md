@@ -1,4 +1,5 @@
 # dataproc-hive-samples
 A set of common init actions for Hive. 
 
-## download-hive-jars.sh
+## add_hive_jars.sh
+Add JARs, most commonly UDFs, to Hive aux lib path and bounce required services.
