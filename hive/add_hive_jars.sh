@@ -14,6 +14,9 @@ function copyAndConfigureHiveAuxLibs() {
   # Ensure that instance metadata was passed with path to Hive aux libs
   if [ -z "$HIVE_AUX_LIBS_GCS_PATH" ]
   then
+      cat /etc/hive/conf/hive-site.xml
+      echo $(/usr/share/google/get_metadata_value attributes/hive-aux-libs)
+
       echo "$HIVE_AUX_LIBS_GCS_PATH is empty"
       exit 1
   fi
