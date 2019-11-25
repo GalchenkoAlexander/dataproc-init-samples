@@ -38,7 +38,7 @@ steps:
       - '--region=${_REGION}'
       - '--zone=${_ZONE}'
       - '--initialization-actions=gs://${_BUILD_BUCKET}/init-actoins/add_hive_jars.sh'
-      - '--metadata hive-aux-libs=gs://${_BUILD_BUCKET}/hive-aux-libs/'
+      - '--metadata=hive-aux-libs=gs://${_BUILD_BUCKET}/hive-aux-libs/'
 
 
 
