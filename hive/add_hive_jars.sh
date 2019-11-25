@@ -8,7 +8,7 @@ function copyAndConfigureHiveAuxLibs() {
   # TODO: set via dataproc properties
     bdconfig set_property \
     --configuration_file "/etc/hive/conf/hive-site.xml" \
-    --name 'hive.aux.jars.path' --value 'file:///usr/lib/hive/auxlib/*' \
+    --name 'hive.reloadable.aux.jars.path' --value 'file:///usr/lib/hive/auxlib/*' \
     --clobber
 
   # Ensure that instance metadata was passed with path to Hive aux libs
@@ -57,7 +57,7 @@ function main() {
   readonly ROLE=$(/usr/share/google/get_metadata_value attributes/dataproc-role)
   if [[ "${ROLE}" == 'Master' ]]; then
     configureAndBounceHiveServer2
-  else
+  fi
   
 }
 
