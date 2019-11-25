@@ -8,12 +8,13 @@ steps:
 
   # get init_actions itself
   - name: 'gcr.io/cloud-builders/git'
-    args: ['clone', '-b', 'develop', '--single-branch', 'https://github.com/GalchenkoAlexander/dataproc-init-samples.git', 'dataproc-samples']
-#    args: ['clone', 'https://github.com/GalchenkoAlexander/dataproc-init-samples.git', 'dataproc-samples']
+#    args: ['clone', '-b', 'develop', '--single-branch', 'https://github.com/GalchenkoAlexander/dataproc-init-samples.git', 'dataproc-samples']
+    args: ['clone', 'https://github.com/GalchenkoAlexander/dataproc-init-samples.git', 'dataproc-samples']
     volumes:
       - path: '/dataproc-samples'
         name: 'repository'
 
+  # copy init actions to GCS
   - name: 'gcr.io/cloud-builders/gsutil'
     args:
       - 'cp'
@@ -24,8 +25,7 @@ steps:
       - path: '/dataproc-samples'
         name: 'repository'
 
-
-  # Testing
+  # Testing: create/delete cluster and remove resources
 
   ## create single node dataproc cluster
   - name: 'gcr.io/cloud-builders/gcloud'
@@ -40,15 +40,18 @@ steps:
       - '--initialization-actions=gs://${_BUILD_BUCKET}/init-actoins/add_hive_jars.sh'
       - '--metadata=hive-aux-libs=gs://${_BUILD_BUCKET}/hive-aux-libs/'
 
-
-
-
-
   ## delete single node dataproc cluster
-#  - name: 'gcr.io/cloud-builders/gcloud'
-#    args:
-#      - 'dataproc'
-#      - 'clusters'
-#      - 'delete'
-#      - '${_CLUSTER_NAME}'
-#      - '--region=${_REGION}'
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'dataproc'
+      - 'clusters'
+      - 'delete'
+      - '${_CLUSTER_NAME}'
+      - '--region=${_REGION}'
+
+  # remove resources
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args:
+      - 'rm'
+      - '-r'
+      - 'gs://${_BUILD_BUCKET}/init-actoins'
